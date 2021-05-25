@@ -11,6 +11,9 @@ import 'icon_with_counter.dart';
 import 'package:ff_app/models/Product.dart';
 import 'package:ff_app/screens/details/details_screen.dart';
 
+
+
+
 class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -108,9 +111,7 @@ class Body extends StatelessWidget {
                               price: demoProducts[index].price,
                               press: () => Navigator.pushNamed(
                                   context, DetailsScreen.routName,
-                                  arguments: DetailsScreen(
-                                    product: demoProducts[index],
-                                  )),
+                                  arguments: demoProducts[index]),
                             ))
                   ],
                 ),
