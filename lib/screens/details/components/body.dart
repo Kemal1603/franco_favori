@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:ff_app/constants.dart';
 import 'package:ff_app/models/Product.dart';
 import 'package:ff_app/size_config.dart';
@@ -13,13 +15,6 @@ class Body extends StatelessWidget {
     return DetailScreenBodyHead(product: product);
   }
 }
-
-
-
-
-
-
-
 
 //TODO: Cut and place somewhere else the block below
 
@@ -44,9 +39,12 @@ class _DetailScreenBodyHeadState extends State<DetailScreenBodyHead> {
         ),
         Center(
           child: SizedBox(
-              width: 258,
-              height: 258,
-              child: Image.asset(widget.product.images[currentImage],),),
+            width: 258,
+            height: 258,
+            child: Image.asset(
+              widget.product.images[currentImage],
+            ),
+          ),
         ),
         SizedBox(
           height: SizeConfig.screenHeight * 0.02,
@@ -70,9 +68,11 @@ class _DetailScreenBodyHeadState extends State<DetailScreenBodyHead> {
                       width: 60.0,
                       height: 60.0,
                       decoration: BoxDecoration(
-                        border: Border.all(
-                          color: currentImage == index ? kPrimaryColor : Colors.black.withOpacity(0.06),
-                        ),
+                          border: Border.all(
+                            color: currentImage == index
+                                ? kPrimaryColor
+                                : Colors.black.withOpacity(0.06),
+                          ),
                           borderRadius: BorderRadius.circular(15.0),
                           color: Colors.black.withOpacity(0.06)),
                       child: Image.asset(widget.product.images[index]),
@@ -82,7 +82,14 @@ class _DetailScreenBodyHeadState extends State<DetailScreenBodyHead> {
               ),
             ],
           ),
-        )
+        ),
+        SizedBox(
+          height: SizeConfig.screenHeight * 0.02,
+        ),
+        Text(
+          '${widget.product.title}',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+        ),
       ],
     );
   }
