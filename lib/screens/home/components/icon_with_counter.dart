@@ -18,7 +18,7 @@ class IconWithCounter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => press,
+      onTap: press,
       borderRadius: BorderRadius.circular(25.0),
       child: Stack(
         children: [

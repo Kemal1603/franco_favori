@@ -6,7 +6,7 @@ class Product {
   final List<String> images;
   final List<Color> colors;
   final double rating, price;
-  final bool isFavourite, isPopular;
+  bool isFavourite, isPopular;
 
   Product({
     @required this.id,
@@ -88,8 +88,6 @@ List<Product> demoProducts = [
     colors: [
       Color(0xFFF6625E),
       Color(0xFF836DB8),
-      Color(0xFFDECB9C),
-      Colors.white,
     ],
     title: "Logitech Head",
     price: 20.20,
@@ -100,6 +98,8 @@ List<Product> demoProducts = [
 ];
 
 const String description =
-    "Wireless Controller for PS4™ gives you"
-    " what you want in your gaming from over "
-    " precision control your games to sharing …";
+    'Lorem ipsum dolor sit amet, '
+    'consectetur adipiscing elit,'
+    ' sed do eiusmod tempor incididunt '
+    'ut labore et dolore magna aliqua. '
+    'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';

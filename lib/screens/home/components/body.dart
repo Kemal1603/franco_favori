@@ -1,4 +1,8 @@
 import 'package:ff_app/constants.dart';
+import 'package:ff_app/models/Arguments.dart';
+import 'package:ff_app/models/Product.dart';
+import 'package:ff_app/screens/cart/cart.dart';
+import 'package:ff_app/screens/details/details_screen.dart';
 import 'package:ff_app/screens/home/components/categories.dart';
 import 'package:ff_app/screens/home/components/special_offers.dart';
 import 'package:ff_app/screens/home/components/title_text.dart';
@@ -6,10 +10,9 @@ import 'package:ff_app/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import 'discount_banner.dart';
 import 'icon_with_counter.dart';
-import 'package:ff_app/models/Product.dart';
-import 'package:ff_app/screens/details/details_screen.dart';
 
 
 
@@ -51,6 +54,9 @@ class Body extends StatelessWidget {
                   ),
                   IconWithCounter(
                     icon: 'assets/icons/Cart Icon.svg',
+                    press: () {
+                      Navigator.pushNamed(context, CartScreen.routName);
+                    }
                   ),
                   IconWithCounter(
                     icon: 'assets/icons/Bell.svg',
@@ -104,15 +110,17 @@ class Body extends StatelessWidget {
                 child: Row(
                   children: [
                     ...List.generate(
-                        demoProducts.length,
-                        (index) => PopularCard(
-                              image: demoProducts[index].images[0],
-                              title: demoProducts[index].title,
-                              price: demoProducts[index].price,
-                              press: () => Navigator.pushNamed(
-                                  context, DetailsScreen.routName,
-                                  arguments: demoProducts[index]),
-                            ))
+                      demoProducts.length,
+                      (index) => PopularCard(
+                        product: demoProducts[index],
+                          press: () => Navigator.pushNamed(
+                              context, DetailsScreen.routName,
+                              arguments: ScreenArguments(
+                                product: demoProducts[index],
+                                page: 'Home',
+                              ))
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -125,11 +133,10 @@ class Body extends StatelessWidget {
 }
 
 class PopularCard extends StatelessWidget {
-  final String image, title;
-  final double price;
+  final Product product;
   final GestureTapCallback press;
 
-  PopularCard({this.image, this.title, this.price, this.press});
+  PopularCard({this.product, this.press});
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +155,7 @@ class PopularCard extends StatelessWidget {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15.0),
                       color: kSecondaryColor.withOpacity(0.2)),
-                  child: Image.asset(image),
+                  child: Image.asset('${product.images[0]}'),
                 ),
               ),
             ),
@@ -161,7 +168,7 @@ class PopularCard extends StatelessWidget {
                   height: 40.0,
                   width: 120.0,
                   child: Text(
-                    title,
+                    '${product.title}',
                     style: TextStyle(fontSize: 13.0),
                   )),
               SizedBox(
@@ -169,7 +176,7 @@ class PopularCard extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      '\$$price',
+                      '\$${product.price}',
                       style: TextStyle(
                           color: kPrimaryColor,
                           fontSize: 17.0,
@@ -178,7 +185,9 @@ class PopularCard extends StatelessWidget {
                     SizedBox(
                       width: 30.0,
                     ),
-                    IsFavoriteClass()
+                    IsFavoriteClass(
+                      product: product,
+                    )
                   ],
                 ),
               )
@@ -191,23 +200,21 @@ class PopularCard extends StatelessWidget {
 }
 
 class IsFavoriteClass extends StatefulWidget {
-  const IsFavoriteClass({
-    Key key,
-  }) : super(key: key);
+  final Product product;
+
+  IsFavoriteClass({this.product});
 
   @override
   _IsFavoriteClassState createState() => _IsFavoriteClassState();
 }
 
 class _IsFavoriteClassState extends State<IsFavoriteClass> {
-  bool ifLiked = false;
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         setState(() {
-          ifLiked = !ifLiked;
+          widget.product.isFavourite = !widget.product.isFavourite;
         });
       },
       child: Container(
@@ -218,9 +225,10 @@ class _IsFavoriteClassState extends State<IsFavoriteClass> {
         child: SvgPicture.asset(
           'assets/icons/Heart Icon_2.svg',
           fit: BoxFit.scaleDown,
-          color: ifLiked ? Colors.red : kSecondaryColor,
+          color: widget.product.isFavourite ? Colors.red : kSecondaryColor,
         ),
       ),
     );
   }
 }
+
