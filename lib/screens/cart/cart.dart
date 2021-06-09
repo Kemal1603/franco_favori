@@ -1,6 +1,8 @@
 import 'package:ff_app/models/Product.dart';
+import 'package:ff_app/models/provider_models/cart_list_model.dart';
 import 'package:ff_app/screens/cart/components/body.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants.dart';
 import '../../size_config.dart';
@@ -8,7 +10,7 @@ import '../../size_config.dart';
 
 class CartScreen extends StatelessWidget {
 
-  static String routName = '/cart';
+  static String routeName = '/cart';
   final List<Product> cartList;
 
   CartScreen({this.cartList});
@@ -47,7 +49,7 @@ class CartScreen extends StatelessWidget {
             color: Colors.black),
                 children: [
                   TextSpan(
-                    text: '\$234.5\n',style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold,
+                    text: '\$ ${Provider.of<UsersCartList>(context).sum.toStringAsFixed(2)}\n',style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold,
                   color: Colors.black)
                   )
                 ]

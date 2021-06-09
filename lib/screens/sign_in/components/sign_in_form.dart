@@ -168,7 +168,7 @@ import 'package:ff_app/screens/home/home_screen.dart';
                     isCorrectEmail && isCorrectPassword) ?
                         Navigator.pushNamed(context, HomeScreen.routName) :
                         showAlertDialog(context);*/
-                    Navigator.pushNamed(context, HomeScreen.routName);
+                    Navigator.pushNamed(context, HomeScreen.routeName);
 
                   },
                   child: Padding(

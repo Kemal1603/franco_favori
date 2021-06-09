@@ -1,6 +1,5 @@
-import 'package:ff_app/constants.dart';
+import 'package:ff_app/components/cart_item.dart';
 import 'package:ff_app/models/Arguments.dart';
-import 'package:ff_app/models/Product.dart';
 import 'package:ff_app/models/provider_models/cart_list_model.dart';
 import 'package:ff_app/screens/details/details_screen.dart';
 import 'package:ff_app/size_config.dart';
@@ -24,9 +23,9 @@ class _BodyState extends State<Body> {
             itemCount: Provider.of<UsersCartList>(context, listen: false).items.length,
             itemBuilder: (context, index) => GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, DetailsScreen.routName,
+                Navigator.popAndPushNamed(context, DetailsScreen.routeName,
                     arguments: ScreenArguments(
-                        product: Provider.of<UsersCartList>(context, listen: false).items[index].product,
+                        product: Provider.of<UsersCartList>(context, listen: false).items[index],
                         page: 'Cart'),);
               },
               child: Dismissible(
@@ -48,8 +47,8 @@ class _BodyState extends State<Body> {
                 key: UniqueKey(),
                 background: Container(color: Colors.redAccent),
                 child: CartItem(
-                  product: Provider.of<UsersCartList>(context).items[index].product,
-                  quantity: Provider.of<UsersCartList>(context).items[index].quantity,
+                  product: Provider.of<UsersCartList>(context).items[index],
+                  quantity: Provider.of<UsersCartList>(context).items[index].pickedQuantity,
                 ),
                 direction: DismissDirection.endToStart,
                 onDismissed: (direction) {
@@ -57,6 +56,8 @@ class _BodyState extends State<Body> {
                     Provider.of<UsersCartList>(context, listen: false).removeCart(
                       index:  index,
                     );
+
+
                   });
                 },
               ),
@@ -68,55 +69,3 @@ class _BodyState extends State<Body> {
   }
 }
 
-class CartItem extends StatelessWidget {
-  final Product product;
-  final int quantity;
-
-  CartItem({this.product, this.quantity});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(18.0),
-      child: Row(
-        children: [
-          Container(
-            height: SizeConfig.screenHeight * 0.10,
-            width: SizeConfig.screenWidth * 0.25,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20.0),
-              color: kSecondaryColor.withOpacity(0.25),
-            ),
-            child: Image.asset(
-              product.images[0],
-              fit: BoxFit.scaleDown,
-            ),
-          ),
-          SizedBox(
-            width: SizeConfig.screenWidth * 0.04,
-          ),
-          Text.rich(TextSpan(
-              text: '${product.title} \n',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
-              children: [
-                TextSpan(
-                  text: '${product.price} \$',
-                  style: TextStyle(
-                      color: kPrimaryColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20.0),
-                ),
-                TextSpan(
-                  text: ' x $quantity',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
-                ),
-              ]),),
-          SizedBox(
-            width: SizeConfig.screenWidth * 0.04,
-          ),
-          Icon(Icons.arrow_forward_ios)
-        ],
-      ),
-    );
-  }
-}

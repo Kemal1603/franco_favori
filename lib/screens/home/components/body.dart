@@ -1,6 +1,8 @@
 import 'package:ff_app/constants.dart';
 import 'package:ff_app/models/Arguments.dart';
 import 'package:ff_app/models/Product.dart';
+import 'package:ff_app/models/provider_models/cart_list_model.dart';
+import 'package:ff_app/models/provider_models/liked_items_list_model.dart';
 import 'package:ff_app/screens/cart/cart.dart';
 import 'package:ff_app/screens/details/details_screen.dart';
 import 'package:ff_app/screens/home/components/categories.dart';
@@ -10,12 +12,10 @@ import 'package:ff_app/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 import 'discount_banner.dart';
 import 'icon_with_counter.dart';
-
-
-
 
 class Body extends StatelessWidget {
   @override
@@ -53,11 +53,12 @@ class Body extends StatelessWidget {
                     ),
                   ),
                   IconWithCounter(
-                    icon: 'assets/icons/Cart Icon.svg',
-                    press: () {
-                      Navigator.pushNamed(context, CartScreen.routName);
-                    }
-                  ),
+                      numOfItems:
+                          Provider.of<UsersCartList>(context).items.length,
+                      icon: 'assets/icons/Cart Icon.svg',
+                      press: () {
+                        Navigator.pushNamed(context, CartScreen.routeName);
+                      }),
                   IconWithCounter(
                     icon: 'assets/icons/Bell.svg',
                   ),
@@ -112,14 +113,13 @@ class Body extends StatelessWidget {
                     ...List.generate(
                       demoProducts.length,
                       (index) => PopularCard(
-                        product: demoProducts[index],
+                          product: demoProducts[index],
                           press: () => Navigator.pushNamed(
-                              context, DetailsScreen.routName,
+                              context, DetailsScreen.routeName,
                               arguments: ScreenArguments(
                                 product: demoProducts[index],
                                 page: 'Home',
-                              ))
-                      ),
+                              ))),
                     ),
                   ],
                 ),
@@ -215,6 +215,13 @@ class _IsFavoriteClassState extends State<IsFavoriteClass> {
       onTap: () {
         setState(() {
           widget.product.isFavourite = !widget.product.isFavourite;
+          widget.product.isFavourite
+              ? Provider.of<UsersLikedList>(context, listen: false)
+                  .addCart(cart: widget.product)
+              : Provider.of<UsersLikedList>(context, listen: false).removeCart(
+                  index: Provider.of<UsersLikedList>(context)
+                      .likedItems
+                      .indexOf(widget.product));
         });
       },
       child: Container(
@@ -231,4 +238,3 @@ class _IsFavoriteClassState extends State<IsFavoriteClass> {
     );
   }
 }
-

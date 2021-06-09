@@ -1,4 +1,5 @@
 import 'package:ff_app/constants.dart';
+import 'package:ff_app/models/provider_models/liked_items_list_model.dart';
 import 'package:ff_app/routes.dart';
 import 'package:ff_app/screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => DetailScreenModel()),
         ChangeNotifierProvider(create: (context) => UsersCartList()),
+        ChangeNotifierProvider(create: (context) => UsersLikedList()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -53,7 +55,7 @@ class MyApp extends StatelessWidget {
               bodyText2: TextStyle(color: kTextColor)),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: SplashScreen.routName,
+        initialRoute: SplashScreen.routeName,
         routes: routes,
       ),
     );

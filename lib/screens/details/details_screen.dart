@@ -1,12 +1,13 @@
 import 'package:ff_app/models/Arguments.dart';
 import 'package:ff_app/models/provider_models/detail_screen_model.dart';
+import 'package:ff_app/screens/cart/cart.dart';
 import 'package:ff_app/screens/details/components/body.dart';
 import 'package:ff_app/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DetailsScreen extends StatelessWidget {
-  static String routName = '/details_screen';
+  static String routeName = '/details_screen';
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,14 @@ class DetailsScreen extends StatelessWidget {
                       builder: (context) => HomeScreen(),
                     ),
                   )
-                : Navigator.pop(context);
+                : tappedProduct.page == 'Cart'
+                ? Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CartScreen(),
+              ),
+            ) :
+            tappedProduct.page  ?? Navigator.pop(context);
           },
           child: Icon(Icons.arrow_back_ios),
         ),

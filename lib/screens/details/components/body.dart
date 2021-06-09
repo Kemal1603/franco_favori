@@ -1,10 +1,10 @@
 import 'dart:ui';
 
 import 'package:ff_app/constants.dart';
-import 'package:ff_app/models/Cart.dart';
 import 'package:ff_app/models/Product.dart';
 import 'package:ff_app/models/provider_models/cart_list_model.dart';
 import 'package:ff_app/models/provider_models/detail_screen_model.dart';
+import 'package:ff_app/models/provider_models/liked_items_list_model.dart';
 import 'package:ff_app/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +14,9 @@ import 'package:provider/provider.dart';
 class Body extends StatelessWidget {
   final Product product;
   final String screen;
+  final int quantity;
 
-  Body({this.product, this.screen});
+  Body({this.product, this.screen, this.quantity});
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +82,13 @@ class DotsAndQuantityRow extends StatefulWidget {
 
 class _DotsAndQuantityRowState extends State<DotsAndQuantityRow> {
   int pickedColor = 0;
-  int quantity = 1;
+  int quantity;
+
+  @override
+  void initState() {
+    super.initState();
+    this.quantity = widget.product.pickedQuantity ?? 1;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +137,14 @@ class _DotsAndQuantityRowState extends State<DotsAndQuantityRow> {
             GestureDetector(
               onTap: () {
                 setState(() {
-                  if (quantity != 1) quantity--;
+                  if (widget.product.pickedQuantity != null &&
+                      widget.product.pickedQuantity != 1) {
+                    Provider.of<UsersCartList>(context, listen: false).sum -=
+                        widget.product.price;
+                    widget.product.pickedQuantity--;
+                  } else if (quantity != 1) {
+                    quantity--;
+                  }
                 });
               },
               child: Container(
@@ -145,7 +159,7 @@ class _DotsAndQuantityRowState extends State<DotsAndQuantityRow> {
               width: SizeConfig.screenWidth * 0.014,
             ),
             Text(
-              '$quantity',
+              '${widget.product.pickedQuantity ?? quantity}',
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -157,7 +171,13 @@ class _DotsAndQuantityRowState extends State<DotsAndQuantityRow> {
             GestureDetector(
               onTap: () {
                 setState(() {
-                  quantity++;
+                  if (widget.product.pickedQuantity == null) {
+                    quantity++;
+                  } else {
+                    Provider.of<UsersCartList>(context, listen: false).sum +=
+                        widget.product.price;
+                    widget.product.pickedQuantity++;
+                  }
                 });
               },
               child: Container(
@@ -185,10 +205,15 @@ class _DotsAndQuantityRowState extends State<DotsAndQuantityRow> {
               ),
               onPressed: () {
                 Provider.of<UsersCartList>(context, listen: false).addCart(
-                  cart: ReadyCart(
-                    product: widget.product,
-                    quantity: quantity,
-                  ),
+                  cart: Product(
+                      id: widget.product.id,
+                      rating: widget.product.rating,
+                      images: widget.product.images,
+                      colors: widget.product.colors,
+                      title: widget.product.title,
+                      price: widget.product.price,
+                      pickedQuantity: quantity,
+                      description: description),
                 );
               },
               child: Padding(
@@ -224,6 +249,13 @@ class _DetailScreenLikeIconState extends State<DetailScreenLikeIcon> {
       onTap: () {
         setState(() {
           widget.product.isFavourite = !widget.product.isFavourite;
+          widget.product.isFavourite
+              ? Provider.of<UsersLikedList>(context, listen: false)
+                  .addCart(cart: widget.product)
+              : Provider.of<UsersLikedList>(context, listen: false).removeCart(
+                  index: Provider.of<UsersLikedList>(context)
+                      .likedItems
+                      .indexOf(widget.product));
         });
       },
       child: Container(

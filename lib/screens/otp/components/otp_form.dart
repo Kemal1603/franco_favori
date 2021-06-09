@@ -1,3 +1,4 @@
+import 'package:ff_app/screens/sign_in/sign_in_screen.dart';
 import 'package:ff_app/size_config.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,8 @@ class _OTPFormState extends State<OTPForm> {
   FocusNode pin2FocusNode;
   FocusNode pin3FocusNode;
   FocusNode pin4FocusNode;
+
+
 
   @override
   void initState() {
@@ -163,14 +166,7 @@ class _OTPFormState extends State<OTPForm> {
             ),
             onPressed: () {
 
-              /*(_nameController.text.isNotEmpty &&
-              _lastNameController.text.isNotEmpty &&
-              _phoneController.text.isNotEmpty &&
-              _addressController.text.isNotEmpty &&
-              isCorrectNameFiled&&
-              isCorrectLastNameFiled) ?
-                  Navigator.pushNamed(context, OTPScreen.routeName) :
-                  showAlertDialog(context);*/
+              Navigator.pushNamed(context, SignInScreen.routeName);
             },
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 55.0),
